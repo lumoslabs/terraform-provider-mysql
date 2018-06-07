@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"errors"
+
 	"github.com/hashicorp/go-version"
 	"github.com/hashicorp/terraform/helper/schema"
 )
@@ -15,6 +16,9 @@ func resourceUser() *schema.Resource {
 		Update: UpdateUser,
 		Read:   ReadUser,
 		Delete: DeleteUser,
+		Importer: &schema.ResourceImporter{
+			State: schema.ImportStatePassthrough,
+		},
 
 		Schema: map[string]*schema.Schema{
 			"user": &schema.Schema{
