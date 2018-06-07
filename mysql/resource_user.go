@@ -3,6 +3,7 @@ package mysql
 import (
 	"fmt"
 	"log"
+	"strings"
 
 	"errors"
 
@@ -17,7 +18,7 @@ func resourceUser() *schema.Resource {
 		Read:   ReadUser,
 		Delete: DeleteUser,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			State: ImportUser,
 		},
 
 		Schema: map[string]*schema.Schema{
@@ -193,4 +194,19 @@ func DeleteUser(d *schema.ResourceData, meta interface{}) error {
 		d.SetId("")
 	}
 	return err
+}
+
+func ImportUser(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
+	input_id := d.Id()
+
+	parts := strings.SplitN(input_id, "@", 2)
+
+	if len(parts) == 2 {
+		d.Set("user", parts[0])
+		d.Set("host", parts[1])
+	} else {
+		return nil, fmt.Errorf("Error parsing id, unable to import: %s. Must be in format USER@HOST.", input_id)
+	}
+
+	return []*schema.ResourceData{d}, nil
 }
