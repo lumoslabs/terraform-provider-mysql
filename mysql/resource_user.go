@@ -208,5 +208,10 @@ func ImportUser(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceDat
 		return nil, fmt.Errorf("Error parsing id, unable to import: %s. Must be in format USER@HOST.", input_id)
 	}
 
+	if d.HasChange("plaintext_password") {
+		_, pw = d.GetChange("plaintext_password")
+		d.Set("plaintext_password", pw)
+	}
+
 	return []*schema.ResourceData{d}, nil
 }
