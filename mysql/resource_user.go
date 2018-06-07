@@ -209,7 +209,7 @@ func ImportUser(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceDat
 	}
 
 	if d.HasChange("plaintext_password") {
-		_, pw = d.GetChange("plaintext_password")
+		_, pw := d.GetChange("plaintext_password")
 		d.Set("plaintext_password", pw)
 	}
 
